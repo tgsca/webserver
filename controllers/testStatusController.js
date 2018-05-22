@@ -17,6 +17,13 @@ exports.get = function (req, res) {
                 "unexecuted": "2%"
             },
             {
+                "testcycle": "CRD Smoke",
+                "testcases": "88",
+                "passed": "82%",
+                "failed": "14%",
+                "unexecuted": "2%"
+            },
+            {
                 "testcycle": "Customer Portal Smoke",
                 "testcases": "20",
                 "passed": "92%",
