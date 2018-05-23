@@ -6,7 +6,8 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 
 // Required data objects
-var testStatus = require('./routes/testStatus');
+//var testStatus = require('./routes/testStatus');
+var fs = require('fs');
 
 var app = express();
 
@@ -19,7 +20,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(api + '/test-status', testStatus);
+/* GET /testStatus */
+app.get(api + '/test-status', function (req, res) {
+  var content = fs.readFileSync('currentStatus.json');
+  var teststatus = JSON.parse(content);
+  res.jsonp(teststatus);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
