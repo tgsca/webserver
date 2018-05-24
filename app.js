@@ -6,12 +6,10 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 
 // Required data objects
-//var testStatus = require('./routes/testStatus');
-var fs = require('fs');
+var testStatus = require('./routes/testStatus');
+var blogposts = require('./routes/blogposts');
 
 var app = express();
-
-var api = '/api/v1';
 
 // usages
 app.use(cors());
@@ -20,12 +18,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-/* GET /testStatus */
-app.get(api + '/test-status', function (req, res) {
-  var content = fs.readFileSync('currentStatus.json');
-  var teststatus = JSON.parse(content);
-  res.jsonp(teststatus);
-});
+var api = '/api/v1';
+var rss = '/rss';
+
+app.use(api + '/test-status', testStatus);
+app.use(rss + '/blogposts', blogposts);
+
+/**
+ * Error handling
+ */
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -36,13 +37,11 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).send({error: err.message});
 });
+
+/**
+ * Export
+ */
 
 module.exports = app;
