@@ -27,8 +27,7 @@ exports.get = function (req, res, next) {
             var blogpostsBasic = {};
         
             var feed = new rss({
-                title: 'TestGilde News',
-                feed_url: 'http://10.0.1.80/testgildenews.xml'
+                title: 'TestGilde News'
             });
         
             for(var blogpost in blogpostsFull["results"]) {
