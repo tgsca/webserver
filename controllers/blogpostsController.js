@@ -7,35 +7,41 @@ var rss = require('rss');
  * GET blogposts for TestGilde
  */
 exports.get = function (req, res, next) {
+    var pathBaseUrl = '';
+    var queryParams = '';
+
     var options = {
         host: 'testgilde.atlassian.net',
-        path: '/wiki/rest/api/content?type=blogpost',
+        path: '/wiki/rest/api/content?type=blogpost&expand=space,version',
         method: 'GET',
         headers: {'Authorization': 'Basic YW5kcmVhcy5zY3plcGFuc2tpQHRlc3RnaWxkZS5kZTplOU9hdGZjYUlGZHZsejlNYWt5QUQxMzQ='}
     };
 
     var request = https.request(options, function(response) {
         response.setEncoding('utf-8');
-        var responseString = '';
+        var responseStr = '';
     
         response.on('data', function(data) {
-            responseString += data;
+            responseStr += data;
         });
     
         response.on('end', function() {
-            var blogpostsFull = JSON.parse(responseString);
+            var blogpostsFull = JSON.parse(responseStr);
             var blogpostsBasic = {};
-        
+
             var feed = new rss({
                 title: 'TestGilde News'
             });
         
             for(var blogpost in blogpostsFull["results"]) {
+
                 feed.item({
-                    title: blogpostsFull["results"][blogpost]["title"],
-                    description: blogpostsFull["results"][blogpost]["_expandable"]["space"],
+                    title: blogpostsFull["results"][blogpost]["space"]["name"]
+                        + ", " + blogpostsFull["results"][blogpost]["version"]["by"]["displayName"]
+                        + ': ' + blogpostsFull["results"][blogpost]["title"],
+                    description: "",
                     url: blogpostsFull["results"][blogpost]["_links"]["tinyui"],
-                    date: Date.now()
+                    date: blogpostsFull["results"][blogpost]["version"]["when"]
                 });
             }
             
