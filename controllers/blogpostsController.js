@@ -12,7 +12,7 @@ exports.get = function (req, res, next) {
 
     var options = {
         host: 'testgilde.atlassian.net',
-        path: '/wiki/rest/api/content?type=blogpost&expand=space,version',
+        path: '/wiki/rest/api/content?type=blogpost&expand=space,version,body.view',
         method: 'GET',
         headers: {'Authorization': 'Basic YW5kcmVhcy5zY3plcGFuc2tpQHRlc3RnaWxkZS5kZTplOU9hdGZjYUlGZHZsejlNYWt5QUQxMzQ='}
     };
@@ -39,7 +39,7 @@ exports.get = function (req, res, next) {
                     title: blogpostsFull["results"][blogpost]["space"]["name"]
                         + ", " + blogpostsFull["results"][blogpost]["version"]["by"]["displayName"]
                         + ': ' + blogpostsFull["results"][blogpost]["title"],
-                    description: "",
+                    description: blogpostsFull["results"][blogpost]["body"]["view"]["value"],
                     url: blogpostsFull["results"][blogpost]["_links"]["tinyui"],
                     date: blogpostsFull["results"][blogpost]["version"]["when"]
                 });
