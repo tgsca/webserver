@@ -39,4 +39,4 @@ Thumbs.db
 # Others #
 ##########
 .vscode/launch.json
-data/db/
+data/
