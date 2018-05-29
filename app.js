@@ -11,6 +11,22 @@ var blogposts = require('./routes/blogposts');
 
 var app = express();
 
+// Connect to mongodb
+var mongoose = require('mongoose');
+var dbPath = 'mongodb://localhost/testgilde';
+mongoose.connect(dbPath);
+var db = mongoose.connection;
+
+db.on('error', function callback(){
+  console.log("Verbindung zu MongoDB fehlgeschlagen");
+  console.log("[" + dbPath + "]");
+});
+
+db.once('open', function callback(){
+  console.log("Verbindung zu MongoDB erfolgreich");
+  console.log("[" + dbPath + "]");
+});
+
 // usages
 app.use(cors());
 app.use(logger('dev'));
