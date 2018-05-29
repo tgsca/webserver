@@ -38,3 +38,26 @@ exports.post = function(req, res, next) {
     testStatus.save();
     res.jsonp(testStatus);
 };
+
+/**
+ * UPDATE an existing test status
+ */
+exports.put = function (req, res, next) {
+    TestStatus.load(req.params.statusId, function (err, testStatus) {
+        testStatus = _.extend(testStatus, req.body);
+        testStatus.save(function (err) {
+            res.jsonp(testStatus);
+        });
+    });
+};
+
+/**
+ * DELETE an existing test status
+ */
+exports.delete = function (req, res, next) {
+    TestStatus.load(req.params.statusId, function (err, statusId) {
+        statusId.remove(function (err) {
+            res.jsonp(statusId);
+        });
+    });
+};
