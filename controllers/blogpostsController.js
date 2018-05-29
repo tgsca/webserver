@@ -14,7 +14,7 @@ exports.get = function (req, res, next) {
         host: 'testgilde.atlassian.net',
         path: '/wiki/rest/api/content?type=blogpost&expand=space,version,body.view',
         method: 'GET',
-        headers: {'Authorization': 'Basic YW5kcmVhcy5zY3plcGFuc2tpQHRlc3RnaWxkZS5kZTplOU9hdGZjYUlGZHZsejlNYWt5QUQxMzQ='}
+        headers: {'Authorization': 'Basic bWFnaWMubW9uaXRvckB0ZXN0Z2lsZGUuZGU6QkNac2NwR2RVbXhaT0hNZEF1bnU2QjVE'}
     };
 
     var request = https.request(options, function(response) {
