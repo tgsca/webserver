@@ -40,3 +40,4 @@ Thumbs.db
 ##########
 .vscode/launch.json
 data/
+startMongoDB.sh
