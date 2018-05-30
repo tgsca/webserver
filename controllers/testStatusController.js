@@ -9,25 +9,31 @@ var TestStatus = mongoose.model('TestStatus');
  * GET all test status
  */
 exports.get = function(req, res, next) {
-    TestStatus.find().exec(function (err, testStatus) {
-        var testStatusList = {};
-        var key = 'status';
-        testStatusList[key] = [];
-
-        for(var ts in testStatus) {
-            var newStatus = {
-                testcycle: testStatus[ts]["project"] + " " + testStatus[ts]["cycle"],
-                testcases: testStatus[ts]["testcases"] ? testStatus[ts]["testcases"] : 0,
-                passed: testStatus[ts]["passed"] ? testStatus[ts]["passed"] : "unknown",
-                failed: testStatus[ts]["failed"] ? testStatus[ts]["failed"] : "unknown",
-                unexecuted: testStatus[ts]["unexecuted"] ? testStatus[ts]["unexecuted"] : "unknown"
-            };
-
-            testStatusList[key].push(newStatus);
-        }
-
-        res.jsonp(testStatusList);
-    });
+    if (req.query.requestor!=null && req.query.requestor=="magicmirror") {
+        TestStatus.find().exec(function (err, testStatus) {
+            var testStatusList = {};
+            var key = 'status';
+            testStatusList[key] = [];
+    
+            for(var ts in testStatus) {
+                var newStatus = {
+                    testcycle: testStatus[ts]["project"] + " " + testStatus[ts]["cycle"],
+                    testcases: testStatus[ts]["testcases"] ? testStatus[ts]["testcases"] : 0,
+                    passed: testStatus[ts]["passed"] ? testStatus[ts]["passed"] : "unknown",
+                    failed: testStatus[ts]["failed"] ? testStatus[ts]["failed"] : "unknown",
+                    unexecuted: testStatus[ts]["unexecuted"] ? testStatus[ts]["unexecuted"] : "unknown"
+                };
+    
+                testStatusList[key].push(newStatus);
+            }
+    
+            res.jsonp(testStatusList);
+        });
+    } else {
+        TestStatus.find().exec(function (err, testStatus) {
+            res.jsonp(testStatus);
+        });
+    }
 };
 
 /**
