@@ -1,7 +1,6 @@
 require('../models/TestStatus');
 
 var _ = require('underscore');
-/* var fs = require('fs'); */
 var mongoose = require('mongoose');
 var TestStatus = mongoose.model('TestStatus');
 
