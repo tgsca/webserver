@@ -17,10 +17,10 @@ exports.get = function(req, res, next) {
             for(var ts in testStatus) {
                 var newStatus = {
                     testcycle: testStatus[ts]["project"] + " " + testStatus[ts]["cycle"],
-                    testcases: testStatus[ts]["testcases"] ? testStatus[ts]["testcases"] : 0,
-                    passed: testStatus[ts]["passed"] ? testStatus[ts]["passed"] : "unknown",
-                    failed: testStatus[ts]["failed"] ? testStatus[ts]["failed"] : "unknown",
-                    unexecuted: testStatus[ts]["unexecuted"] ? testStatus[ts]["unexecuted"] : "unknown"
+                    testcases: testStatus[ts]["passed"] + testStatus[ts]["failed"] + testStatus[ts]["unexecuted"],
+                    passed: testStatus[ts]["passed"] ? testStatus[ts]["passed"] : 0,
+                    failed: testStatus[ts]["failed"] ? testStatus[ts]["failed"] : 0,
+                    unexecuted: testStatus[ts]["unexecuted"] ? testStatus[ts]["unexecuted"] : 0
                 };
     
                 testStatusList[key].push(newStatus);

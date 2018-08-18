@@ -10,20 +10,16 @@ var TestStatusSchema = new Schema({
         type: String,
         required: true
     },
-    testcases: {
+    passed: {
         type: Number,
         required: true
     },
-    passed: {
-        type: String,
-        required: true
-    },
     failed: {
-        type: String,
+        type: Number,
         required: true
     },
     unexecuted: {
-        type: String,
+        type: Number,
         required: true
     },
     created: {
