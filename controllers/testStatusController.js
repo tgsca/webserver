@@ -6,6 +6,7 @@ var TestStatus = mongoose.model('TestStatus');
 
 /**
  * GET all test status
+ * Query
  */
 exports.get = function(req, res, next) {
     if (req.query.requestor!=null && req.query.requestor=="magicmirror") {
@@ -15,12 +16,28 @@ exports.get = function(req, res, next) {
             testStatusList[key] = [];
     
             for(var ts in testStatus) {
+                var passed = testStatus[ts]["passed"] ? testStatus[ts]["passed"] : 0;
+                var failed = testStatus[ts]["failed"] ? testStatus[ts]["failed"] : 0;
+                var blocked = testStatus[ts]["blocked"] ? testStatus[ts]["blocked"] : 0;
+                var norun = testStatus[ts]["norun"] ? testStatus[ts]["norun"] : 0;
+                var sum = passed + failed + blocked + norun;
+                var unit = " (in #)";
+
+                if (req.query.percentage!=null && req.query.percentage==true) {
+                    passed = Math.round(passed/sum * 100);
+                    failed = Math.round(failed/sum * 100);
+                    blocked = Math.round(blocked/sum * 100);
+                    norun = Math.round(norun/sum * 100);
+                    unit = " (in %)"
+                }
+
                 var newStatus = {
-                    testcycle: testStatus[ts]["project"] + " " + testStatus[ts]["cycle"],
-                    testcases: testStatus[ts]["passed"] + testStatus[ts]["failed"] + testStatus[ts]["unexecuted"],
-                    passed: testStatus[ts]["passed"] ? testStatus[ts]["passed"] : 0,
-                    failed: testStatus[ts]["failed"] ? testStatus[ts]["failed"] : 0,
-                    unexecuted: testStatus[ts]["unexecuted"] ? testStatus[ts]["unexecuted"] : 0
+                    cycle: testStatus[ts]["project"] + " " + testStatus[ts]["cycle"] + unit,
+                    testcount: sum,
+                    passed: passed,
+                    failed: failed,
+                    blocked: blocked,
+                    norun: norun
                 };
     
                 testStatusList[key].push(newStatus);
@@ -40,8 +57,14 @@ exports.get = function(req, res, next) {
  */
 exports.post = function(req, res, next) {
     var testStatus = new TestStatus(req.body);
-    testStatus.save();
-    res.jsonp(testStatus);
+
+    testStatus.save(function (err) {
+        if (err) {
+            res.status(err.status || 400).send(err.message);
+        } else {
+            res.jsonp(testStatus);
+        }
+    });
 };
 
 /**
@@ -51,7 +74,11 @@ exports.put = function (req, res, next) {
     TestStatus.load(req.params.statusId, function (err, testStatus) {
         testStatus = _.extend(testStatus, req.body);
         testStatus.save(function (err) {
-            res.jsonp(testStatus);
+            if (err) {
+                res.status(err.status || 400).send(err.message);
+            } else {
+                res.jsonp(testStatus);
+            }
         });
     });
 };
@@ -60,9 +87,11 @@ exports.put = function (req, res, next) {
  * DELETE an existing test status
  */
 exports.delete = function (req, res, next) {
-    TestStatus.load(req.params.statusId, function (err, statusId) {
-        statusId.remove(function (err) {
-            res.jsonp(statusId);
-        });
+    TestStatus.findByIdAndRemove(req.params.statusId, function (err, statusId) {
+        if (statusId == null) {
+            res.status(400).send("Test status with id '" + req.params.statusId + "' could not be found!");
+        } else {
+            res.send("Test status with id '" + req.params.statusId + "' deleted successfully.");
+        }
     });
 };

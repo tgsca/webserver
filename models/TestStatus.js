@@ -18,7 +18,11 @@ var TestStatusSchema = new Schema({
         type: Number,
         required: true
     },
-    unexecuted: {
+    blocked: {
+        type: Number,
+        required: true
+    },
+    norun: {
         type: Number,
         required: true
     },

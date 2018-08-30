@@ -38,6 +38,7 @@ Thumbs.db
 
 # Others #
 ##########
+.vscode
 .vscode/launch.json
+.vscode/settings.json
 data/
-startMongoDB.sh
