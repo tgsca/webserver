@@ -13,7 +13,7 @@ var app = express();
 
 // Connect to mongodb
 var mongoose = require('mongoose');
-var dbPath = 'mongodb://localhost/testgilde';
+var dbPath = 'mongodb://tg_mm:webserver42@ds145562.mlab.com:45562/testgilde';
 mongoose.connect(dbPath);
 var db = mongoose.connection;
 
